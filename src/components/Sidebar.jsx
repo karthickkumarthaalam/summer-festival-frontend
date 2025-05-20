@@ -7,6 +7,7 @@ import {
   UserCircle2,
   Newspaper,
   Settings,
+  Mails,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -18,6 +19,7 @@ const Sidebar = () => {
     { label: "Banner", icon: Image, path: "/banner" },
     { label: "Artist", icon: UserCircle2, path: "/artist" },
     { label: "News", icon: Newspaper, path: "/news" },
+    { label: "Contact Us", icon: Mails, path: "/contact-us" },
     { label: "Settings", icon: Settings, path: "/settings" },
   ];
 
@@ -55,6 +57,7 @@ const Sidebar = () => {
                     : "hover:bg-secondary-100 text-gray-700"
                 }`
               }
+              onClick={() => setIsOpen(!isOpen)}
             >
               <Icon size={20} />
               {label}

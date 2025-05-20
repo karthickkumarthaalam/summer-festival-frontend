@@ -107,13 +107,13 @@ const Artist = () => {
   };
 
   return (
-    <>
+    <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
       <BreadCrumb
         title={"Artist Report"}
         paths={["Programs", "Artist Report"]}
       />
 
-      <div className="mt-4 rounded-sm shadow-md px-6 py-4 mx-4 bg-white flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+      <div className="mt-4 rounded-sm shadow-md px-6 py-4 mx-4 bg-white flex-1  ">
         <div className="flex flex-row justify-between items-center gap-3 border-b border-dashed border-dray-300 pb-3">
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
             Artist Report
@@ -287,7 +287,7 @@ const Artist = () => {
         onClose={() => setShowArtist(false)}
         artistData={selectedArtist}
       />
-    </>
+    </div>
   );
 };
 

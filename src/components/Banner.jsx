@@ -5,6 +5,7 @@ import AddBanner from "./AddBanner";
 import { apiCall } from "../utils/apiCall";
 import debounce from "lodash.debounce";
 import { toast } from "react-toastify";
+import CopyrightFooter from "./CoyprightFooter";
 
 const Banner = () => {
   const [banners, setBanners] = useState([[]]);

@@ -104,10 +104,10 @@ const Settings = () => {
   };
 
   return (
-    <>
+    <div className=" overflow-y-auto">
       <BreadCrumb title={"Settings"} paths={["Reset Password"]} />
 
-      <div className="flex flex-col flex-1 px-6 py-8 overflow-y-auto">
+      <div className="flex flex-col flex-1 px-6 py-8">
         <div className="w-full bg-white rounded-lg shadow-md p-6">
           <h2 className="text-lg font-semibold text-gray-800 pb-3 border-b border-gray-200 mb-6">
             Reset Password
@@ -291,7 +291,7 @@ const Settings = () => {
       <div className="mt-auto">
         <CopyrightFooter />
       </div>
-    </>
+    </div>
   );
 };
 

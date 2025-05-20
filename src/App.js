@@ -11,6 +11,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Settings from './pages/Settings';
 import Artist from './pages/Artist';
 import BannerPage from './pages/BannerPage';
+import News from './pages/News';
+import ContactUs from './pages/ContactUs';
 
 const AuthenticatedLayout = () => {
 
@@ -41,6 +43,8 @@ function AppRoutes() {
         <Route path="/artist" element={<Artist />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/banner" element={<BannerPage />} />
+        <Route path='/news' element={<News />} />
+        <Route path="/contact-us" element={<ContactUs />} />
       </Route>
     </Routes>
   );
