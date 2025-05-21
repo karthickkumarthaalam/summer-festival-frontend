@@ -13,6 +13,7 @@ import Artist from './pages/Artist';
 import BannerPage from './pages/BannerPage';
 import News from './pages/News';
 import ContactUs from './pages/ContactUs';
+import ShowLineUp from './pages/ShowLineUp';
 
 const AuthenticatedLayout = () => {
 
@@ -41,6 +42,7 @@ function AppRoutes() {
       <Route element={user ? <AuthenticatedLayout /> : <Navigate to="/" />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/artist" element={<Artist />} />
+        <Route path="/show-lineup" element={<ShowLineUp />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/banner" element={<BannerPage />} />
         <Route path='/news' element={<News />} />

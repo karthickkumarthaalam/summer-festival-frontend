@@ -14,7 +14,7 @@ const DashboardContent = () => {
     artists: 0,
     news: 0,
     banners: 0,
-    events: 0,
+    showLineups: 0,
   });
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const DashboardContent = () => {
             artists: res.data.artists || 0,
             news: res.data.news || 0,
             banners: res.data.banners || 0,
-            events: res.data.events || 0,
+            showLineups: res.data.showLineups || 0,
           });
         }
       } catch (error) {
@@ -60,8 +60,8 @@ const DashboardContent = () => {
       bgGradient: "from-indigo-400 to-indigo-600",
     },
     {
-      label: "Total Events",
-      value: counts.events,
+      label: "Total Show Lineups",
+      value: counts.showLineups,
       icon: iconMap.events,
       borderColor: "border-green-600",
       bgGradient: "from-green-400 to-green-600",

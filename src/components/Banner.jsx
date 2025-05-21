@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import CopyrightFooter from "./CoyprightFooter";
 
 const Banner = () => {
-  const [banners, setBanners] = useState([[]]);
+  const [banners, setBanners] = useState([]);
   const [editBannerId, setEditBannerId] = useState(null);
   const [selectedBanner, setSelectedBanner] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -181,14 +181,10 @@ const Banner = () => {
                         <td className="py-2 px-4 border">{banner.title}</td>
                         <td className="py-2 px-4 border">
                           <img
-                            src={
-                              banner.image
-                                ? `${BASE_URL}/${banner.image.replace(
-                                    /\\/g,
-                                    "/"
-                                  )}`
-                                : "/assets/no-image.png"
-                            }
+                            src={`${BASE_URL}/${banner.image?.replace(
+                              /\\/g,
+                              "/"
+                            )}`}
                             alt={banner.title}
                             className="w-16 h-16 object-cover rounded"
                           />

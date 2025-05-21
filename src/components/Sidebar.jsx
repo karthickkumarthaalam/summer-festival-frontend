@@ -8,6 +8,7 @@ import {
   Newspaper,
   Settings,
   Mails,
+  ListOrdered,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -18,6 +19,7 @@ const Sidebar = () => {
     { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
     { label: "Banner", icon: Image, path: "/banner" },
     { label: "Artist", icon: UserCircle2, path: "/artist" },
+    { label: "Show LineUps", icon: ListOrdered, path: "/show-lineup" },
     { label: "News", icon: Newspaper, path: "/news" },
     { label: "Contact Us", icon: Mails, path: "/contact-us" },
     { label: "Settings", icon: Settings, path: "/settings" },
