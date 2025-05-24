@@ -83,7 +83,7 @@ const ForgotPassword = () => {
         onSubmit={isOtpSent ? handlePasswordReset : handleEmailSubmit}
         className="bg-white p-12 rounded-lg shadow-lg w-[450px] space-y-6"
       >
-        <h2 className="text-3xl font-medium text-center text-red-600">
+        <h2 className="text-3xl font-medium text-center text-primary-600">
           Reset Password
         </h2>
 
@@ -101,7 +101,7 @@ const ForgotPassword = () => {
               className={`peer w-full border ${
                 errors.email ? "border-red-500" : "border-gray-300"
               } p-3 pt-5 rounded focus:outline-none focus:ring-1 ${
-                errors.email ? "focus:ring-red-800" : "focus:ring-red-500"
+                errors.email ? "focus:ring-red-800" : "focus:ring-primary-500"
               }`}
             />
             <label
@@ -134,7 +134,7 @@ const ForgotPassword = () => {
               className={`peer w-full border ${
                 errors.otp ? "border-red-500" : "border-gray-300"
               } p-3 pt-5 rounded focus:outline-none focus:ring-1 ${
-                errors.otp ? "focus:ring-red-800" : "focus:ring-red-500"
+                errors.otp ? "focus:ring-red-800" : "focus:ring-primary-500"
               }`}
             />
             <label
@@ -169,7 +169,7 @@ const ForgotPassword = () => {
                 } ${
                   errors.newPassword
                     ? "focus:ring-red-800"
-                    : "focus:ring-red-500"
+                    : "focus:ring-primary-500"
                 }`}
               />
               <label
@@ -204,7 +204,7 @@ const ForgotPassword = () => {
                 } ${
                   errors.confirmPassword
                     ? "focus:ring-red-800"
-                    : "focus:ring-red-500"
+                    : "focus:ring-primary-500"
                 }`}
               />
               <label
@@ -228,7 +228,7 @@ const ForgotPassword = () => {
 
         <button
           type="submit"
-          className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600"
+          className="w-full bg-primary-500 text-white p-2 rounded hover:bg-primary-600"
         >
           {isOtpSent ? "Reset Password" : "Send OTP"}
         </button>
@@ -242,7 +242,7 @@ const ForgotPassword = () => {
           <button
             type="button"
             onClick={handleEmailSubmit}
-            className="w-full bg-blue-800  text-white p-2 rounded hover:bg-blue-900"
+            className="w-full bg-blue-600  text-white p-2 rounded hover:bg-blue-700"
           >
             Resend OTP
           </button>

@@ -11,6 +11,11 @@ export const apiCall = async (endpoint, method = "GET", data = null, config = {}
             ...config
         });
 
+        const contentType = response.headers["content-type"];
+        if (!contentType || !contentType.includes("application/json")) {
+            throw new Error("Invalid response format from server");
+        }
+
         if (response.pagination) {
             return { data: response.data, pagination: response.pagination };
         }
