@@ -165,6 +165,7 @@ const Artist = () => {
                   <tr className="bg-primary-100 text-left text-sm text-gray-700">
                     <th className="px-4 py-2 border ">SI</th>
                     <th className="px-4 py-2 border">Artist Name</th>
+                    <th className="px-4 py-2 border">Role</th>
                     <th className="px-4 py-2 border">Image</th>
                     <th className="px-4 py-2 border">Status</th>
                     <th className="px-4 py-2 border">Actions</th>
@@ -188,6 +189,9 @@ const Artist = () => {
                         </td>
                         <td className="py-2 px-4 border">
                           {artist.artist_name}
+                        </td>
+                        <td className="py-2 px-4 border">
+                          {artist.role ? artist.role : "N/A"}
                         </td>
                         <td className="py-2 px-4 border">
                           <img

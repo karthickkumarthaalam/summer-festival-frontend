@@ -30,6 +30,7 @@ const AddArtistModal = ({ isOpen, onClose, editArtistData, onSuccess }) => {
   const resetForm = () => {
     setForm({
       artist_name: "",
+      role: "",
       description: "",
       image: null,
       language: [],
@@ -46,6 +47,7 @@ const AddArtistModal = ({ isOpen, onClose, editArtistData, onSuccess }) => {
   const populateForm = (data) => {
     setForm({
       artist_name: data.artist_name || "",
+      role: data.role || "",
       description: data.description || "",
       image: null,
       language: data.language || [],
@@ -86,6 +88,7 @@ const AddArtistModal = ({ isOpen, onClose, editArtistData, onSuccess }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!form.artist_name) newErrors.artist_name = "Artist name is required.";
+    if (!form.role) newErrors.role = "Role is required.";
     if (!form.description) newErrors.description = "Description is required.";
     if (!editArtistData && !form.image) newErrors.image = "Image is required.";
     setErrors(newErrors);
@@ -98,6 +101,7 @@ const AddArtistModal = ({ isOpen, onClose, editArtistData, onSuccess }) => {
     try {
       const formData = new FormData();
       formData.append("artist_name", form.artist_name);
+      formData.append("role", form.role);
       formData.append("description", form.description);
       if (form.image) formData.append("image", form.image);
       formData.append("language", JSON.stringify(form.language));
@@ -143,19 +147,36 @@ const AddArtistModal = ({ isOpen, onClose, editArtistData, onSuccess }) => {
 
         <div className="space-y-4">
           {/* Artist Name */}
-          <div className="flex flex-col">
-            <label className="font-medium mb-1 text-sm">Artist Name</label>
-            <input
-              type="text"
-              name="artist_name"
-              value={form.artist_name}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-              placeholder="Artist Name"
-            />
-            {errors.artist_name && (
-              <p className="text-sm text-red-500">{errors.artist_name}</p>
-            )}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="flex flex-col">
+              <label className="font-medium mb-1 text-sm">Artist Name</label>
+              <input
+                type="text"
+                name="artist_name"
+                value={form.artist_name}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                placeholder="Artist Name"
+              />
+              {errors.artist_name && (
+                <p className="text-sm text-red-500">{errors.artist_name}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col">
+              <label className="font-medium mb-1 text-sm">Role</label>
+              <input
+                type="text"
+                name="role"
+                value={form.role || ""}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                placeholder="Role (e.g., Singer, Actor)"
+              />
+              {errors.role && (
+                <p className="text-sm text-red-500">{errors.role}</p>
+              )}
+            </div>
           </div>
 
           {/* Description */}

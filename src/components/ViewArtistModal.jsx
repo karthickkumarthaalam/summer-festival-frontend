@@ -25,6 +25,9 @@ const ViewArtistModal = ({ isOpen, onClose, artistData }) => {
               {artistData.artist_name}
             </div>
             <div>
+              <span className="font-semibold">Role:</span> {artistData.role}
+            </div>
+            <div>
               <span className="font-semibold">Description:</span>
               <p className="mt-1 text-gray-600 text-sm">
                 {artistData.description}

@@ -7,7 +7,7 @@ const BannerPage = () => {
 
   const tabs = [
     { id: "banner", label: "Banner" },
-    { id: "top_event", label: "Top Event Offer" },
+    { id: "top_event", label: "Heading Offer" },
   ];
 
   return (
