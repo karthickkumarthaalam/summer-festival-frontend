@@ -14,6 +14,7 @@ import BannerPage from './pages/BannerPage';
 import News from './pages/News';
 import ContactUs from './pages/ContactUs';
 import ShowLineUp from './pages/ShowLineUp';
+import Enquiry from './pages/Enquiry';
 
 const AuthenticatedLayout = () => {
 
@@ -45,6 +46,7 @@ function AppRoutes() {
         <Route path="/show-lineup" element={<ShowLineUp />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/banner" element={<BannerPage />} />
+        <Route path="/enquiry" element={<Enquiry />} />
         <Route path='/news' element={<News />} />
         <Route path="/contact-us" element={<ContactUs />} />
       </Route>
