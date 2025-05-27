@@ -44,7 +44,7 @@ const Sidebar = () => {
       >
         <div className="p-4 border-b bordr-gray-400 flex items-center justify-center">
           <img
-            src="/summerfest/thaalam-logo.png"
+            src="/summerfest/admintogo/thaalam-logo.png"
             alt="thaalam subscription logo"
             className="h-24 w-24"
           />

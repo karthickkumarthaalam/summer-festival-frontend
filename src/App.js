@@ -58,7 +58,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter basename="/summerfest">
+      <BrowserRouter basename="/summerfest/admintogo">
         <AppRoutes />
         <ToastContainer position='top-right' autoClose={3000} />
       </BrowserRouter>
