@@ -102,7 +102,7 @@ const AddTopEventOfferModal = ({
         </button>
 
         <h2 className="text-xl font-semibold mb-4 text-primary-600">
-          {editOfferData ? "Edit Top Event Offer" : "Add Top Event Offer"}
+          {editOfferData ? "Edit Top News" : "Add Top News"}
         </h2>
 
         <div className="space-y-4">

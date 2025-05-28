@@ -93,16 +93,13 @@ const TopEventOffer = () => {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <BreadCrumb
-          title="Heading Offer Management"
-          paths={["Offer", "Heading Offers"]}
-        />
+        <BreadCrumb title="Top News Management" paths={["Offer", "Top News"]} />
       </div>
 
       <div className="mt-4 rounded-sm shadow-md md:px-6 md:py-6 md:mx-4 bg-white flex-1 overflow-y-auto">
         <div className="flex flex-row justify-between items-center gap-3 border-b border-dashed border-gray-300 pb-3">
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
-            Heading Offers
+            Top News
           </p>
           <button
             onClick={handleAddOffer}
