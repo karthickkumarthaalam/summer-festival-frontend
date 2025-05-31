@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 const AddBannerModal = ({ isOpen, onClose, editBannerData, onSuccess }) => {
   const [form, setForm] = useState({
-    title: "",
+    title: " ",
     image: null,
     language: [],
   });
@@ -33,7 +33,7 @@ const AddBannerModal = ({ isOpen, onClose, editBannerData, onSuccess }) => {
 
   const populateForm = (data) => {
     setForm({
-      title: data.title || "",
+      title: data.title || " ",
       image: null,
       language: data.language,
     });
@@ -68,7 +68,7 @@ const AddBannerModal = ({ isOpen, onClose, editBannerData, onSuccess }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!form.title) newErrors.title = "Title is required.";
+    // if (!form.title) newErrors.title = "Title is required.";
     if (!editBannerData && !form.image) newErrors.image = "Image is required.";
 
     setErrors(newErrors);
@@ -80,7 +80,7 @@ const AddBannerModal = ({ isOpen, onClose, editBannerData, onSuccess }) => {
 
     try {
       const formData = new FormData();
-      formData.append("title", form.title);
+      formData.append("title", form.title || " ");
       if (form.image) formData.append("image", form.image);
       formData.append("language", JSON.stringify(form.language));
 
