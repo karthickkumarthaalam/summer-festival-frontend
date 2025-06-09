@@ -8,10 +8,19 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
-        setLoading(false);
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            const loginTime = parsedUser.loginTime;
+            const currTime = new Date().getTime();
+
+            if (currTime - loginTime > 30 * 60 * 1000) {
+                logout();
+            } else {
+                setUser(parsedUser);
+            }
         }
+        setLoading(false);
+
     }, []);
 
     const logout = () => {

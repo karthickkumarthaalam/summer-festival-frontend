@@ -30,7 +30,10 @@ const Login = () => {
 
     try {
       let data = await apiCall("/auth/login", "POST", form);
-      localStorage.setItem("user", JSON.stringify(data));
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...data, loginTime: new Date().getTime() })
+      );
       navigate("/dashboard");
       setUser(data);
       toast.success("Login successful!");

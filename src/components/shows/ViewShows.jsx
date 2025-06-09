@@ -10,7 +10,10 @@ const ViewShowModal = ({ isOpen, onClose, showData }) => {
     if (showData && showData.lineup_id) {
       const fetchLineup = async () => {
         try {
-          const response = await apiCall(`/showlineup/${lineup_id}`, "GET");
+          const response = await apiCall(
+            `/showlineup/${showData.lineup_id}`,
+            "GET"
+          );
           setShowLineUp(response.data);
         } catch (error) {
           toast.error("failed to fetch show lineup");
