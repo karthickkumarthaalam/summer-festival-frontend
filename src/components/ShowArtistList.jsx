@@ -88,7 +88,7 @@ const ShowArtistList = () => {
             className="rounded-md bg-primary-500 text-sm text-white px-4 py-2 flex items-center gap-2 hover:bg-primary-600"
           >
             <BadgePlus size={16} />
-            Add Shows
+            Add Show Artist
           </button>
         </div>
 

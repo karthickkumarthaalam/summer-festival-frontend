@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
-import { apiCall } from "../utils/apiCall";
+import { useState, useEffect } from "react";
+import { apiCall } from "../../utils/apiCall";
 import { toast } from "react-toastify";
-import BreadCrumb from "../components/BreadCrumb";
+import BreadCrumb from "../BreadCrumb";
 import { Search, Loader2 } from "lucide-react";
-import CopyrightFooter from "../components/CoyprightFooter";
+import CopyrightFooter from "../CoyprightFooter";
 import debounce from "lodash.debounce";
-import MessageModal from "../components/MessageModal";
 
-const Enquiry = () => {
-  const [enquiryData, setEnquiryData] = useState([]);
+const StallEnquiry = () => {
+  const [enquires, setEnquires] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setselectedMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const pageSize = 20;
 
@@ -22,13 +19,11 @@ const Enquiry = () => {
     setLoading(true);
     try {
       const response = await apiCall(
-        `/enquiry?page=${currentPage}&search=${searchQuery}`,
-        "GET"
+        `/stall-enquiry?page=${currentPage}&search=${searchQuery}`
       );
-      setEnquiryData(response.data.data);
+      setEnquires(response.data.data);
       setTotalRecords(response.data.pagination.totalRecords);
     } catch (error) {
-      console.error("Error fetching enquiries", error);
       toast.error("Failed to fetch enquiries");
     } finally {
       setLoading(false);
@@ -38,11 +33,6 @@ const Enquiry = () => {
   useEffect(() => {
     fetchEnquiries();
   }, [currentPage, searchQuery]);
-
-  const openDescriptionModal = (description) => {
-    setselectedMessage(description);
-    setIsModalOpen(true);
-  };
 
   const handleSearch = debounce((value) => {
     setSearchQuery(value);
@@ -63,9 +53,9 @@ const Enquiry = () => {
 
     const newStatus = statusCycle[currentStatus];
     try {
-      await apiCall(`/enquiry/${id}`, "PATCH", { status: newStatus });
+      await apiCall(`/stall-enquiry/${id}`, "PATCH", { status: newStatus });
       toast.success(`Status updated to ${newStatus}`);
-      setEnquiryData((prev) =>
+      setEnquires((prev) =>
         prev.map((enquiry) =>
           enquiry.id === id ? { ...enquiry, status: newStatus } : enquiry
         )
@@ -83,14 +73,14 @@ const Enquiry = () => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <BreadCrumb
           title={"Enquiry Management"}
-          paths={["Enquiry", "Ticket Enquiry"]}
+          paths={["Enquiry", "Stall Enquiry"]}
         />
       </div>
 
       <div className="mt-4 rounded-sm shadow-md px-6 py-4 mx-4 bg-white flex-1">
         <div className="flex flex-row justify-between items-center gap-3 border-b border-dashed border-gray-300 pb-3">
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
-            Enquiry List
+            Stall Enquiry List
           </p>
         </div>
 
@@ -120,34 +110,39 @@ const Enquiry = () => {
                 <thead>
                   <tr className="bg-primary-100 text-left text-sm text-gray-700">
                     <th className="px-4 py-2 border">SI</th>
-                    <th className="px-4 py-2 border">Name</th>
-                    <th className="px-4 py-2 border">Phone</th>
+                    <th className="px-4 py-2 border">Shop Name</th>
+                    <th className="px-4 py-2 border">Person Name</th>
                     <th className="px-4 py-2 border">Email</th>
-                    <th className="px-4 py-2 border">Ticket Id</th>
+                    <th className="px-4 py-2 border">Phone</th>
+                    <th className="px-4 py-2 border">Category</th>
                     <th className="px-4 py-2 border">Status</th>
-                    <th className="px-4 py-2 border">Message</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {enquiryData.length === 0 ? (
+                  {enquires.length === 0 ? (
                     <tr>
                       <td
-                        colSpan="5"
+                        colSpan="7"
                         className="text-center py-6 text-sm md:text-lg text-gray-500"
                       >
                         No Enquiries Found
                       </td>
                     </tr>
                   ) : (
-                    enquiryData.map((enquiry, index) => (
+                    enquires.map((enquiry, index) => (
                       <tr key={enquiry.id}>
                         <td className="py-2 px-4 border">
                           {(currentPage - 1) * pageSize + index + 1}
                         </td>
-                        <td className="py-2 px-4 border">{enquiry.name}</td>
-                        <td className="py-2 px-4 border">{enquiry.phone}</td>
+                        <td className="py-2 px-4 border">
+                          {enquiry.shop_name}
+                        </td>
+                        <td className="py-2 px-4 border">
+                          {enquiry.person_name}
+                        </td>
                         <td className="py-2 px-4 border">{enquiry.email}</td>
-                        <td className="py-2 px-4 border">{enquiry.subject}</td>
+                        <td className="py-2 px-4 border">{enquiry.phone}</td>
+                        <td className="py-2 px-4 border">{enquiry.category}</td>
                         <td className="py-2 px-4 border">
                           <button
                             onClick={() =>
@@ -163,16 +158,6 @@ const Enquiry = () => {
                                   }`}
                           >
                             {enquiry.status}
-                          </button>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              openDescriptionModal(enquiry.message)
-                            }
-                            className="text-xs text-primary-600 hover:underline"
-                          >
-                            View
                           </button>
                         </td>
                       </tr>
@@ -210,15 +195,10 @@ const Enquiry = () => {
           </>
         )}
       </div>
-      <MessageModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        message={selectedMessage}
-      />
 
       <CopyrightFooter />
     </div>
   );
 };
 
-export default Enquiry;
+export default StallEnquiry;

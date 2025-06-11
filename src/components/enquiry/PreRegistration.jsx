@@ -1,34 +1,30 @@
-import { useEffect, useState } from "react";
-import { apiCall } from "../utils/apiCall";
+import React from "react";
+import { useState, useEffect } from "react";
+import { apiCall } from "../../utils/apiCall";
 import { toast } from "react-toastify";
-import BreadCrumb from "../components/BreadCrumb";
+import BreadCrumb from "../BreadCrumb";
 import { Search, Loader2 } from "lucide-react";
-import CopyrightFooter from "../components/CoyprightFooter";
+import CopyrightFooter from "../CoyprightFooter";
 import debounce from "lodash.debounce";
-import MessageModal from "../components/MessageModal";
 
-const Enquiry = () => {
-  const [enquiryData, setEnquiryData] = useState([]);
+const PreRegistration = () => {
+  const [registrations, setRegistrations] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setselectedMessage] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const pageSize = 20;
 
-  const fetchEnquiries = async () => {
+  const fetchRegistration = async () => {
     setLoading(true);
     try {
       const response = await apiCall(
-        `/enquiry?page=${currentPage}&search=${searchQuery}`,
-        "GET"
+        `/pre-registration?page=${currentPage}&search=${searchQuery}`
       );
-      setEnquiryData(response.data.data);
+      setRegistrations(response.data.data);
       setTotalRecords(response.data.pagination.totalRecords);
     } catch (error) {
-      console.error("Error fetching enquiries", error);
       toast.error("Failed to fetch enquiries");
     } finally {
       setLoading(false);
@@ -36,45 +32,13 @@ const Enquiry = () => {
   };
 
   useEffect(() => {
-    fetchEnquiries();
-  }, [currentPage, searchQuery]);
-
-  const openDescriptionModal = (description) => {
-    setselectedMessage(description);
-    setIsModalOpen(true);
-  };
+    fetchRegistration();
+  }, [searchQuery, currentPage]);
 
   const handleSearch = debounce((value) => {
     setSearchQuery(value);
     setCurrentPage(1);
   }, 500);
-
-  const statusCycle = {
-    pending: "resolved",
-    resolved: "closed",
-    closed: "pending",
-  };
-
-  const handleStatusChange = async (id, currentStatus) => {
-    if (currentStatus === "closed") {
-      toast.info("This enquiry is already closed and cannot be changed.");
-      return;
-    }
-
-    const newStatus = statusCycle[currentStatus];
-    try {
-      await apiCall(`/enquiry/${id}`, "PATCH", { status: newStatus });
-      toast.success(`Status updated to ${newStatus}`);
-      setEnquiryData((prev) =>
-        prev.map((enquiry) =>
-          enquiry.id === id ? { ...enquiry, status: newStatus } : enquiry
-        )
-      );
-    } catch (error) {
-      console.error("Failed to update status", error);
-      toast.error("Failed to update status");
-    }
-  };
 
   const totalPages = Math.ceil(totalRecords / pageSize);
 
@@ -83,14 +47,14 @@ const Enquiry = () => {
       <div className="flex flex-col flex-1 overflow-hidden">
         <BreadCrumb
           title={"Enquiry Management"}
-          paths={["Enquiry", "Ticket Enquiry"]}
+          paths={["Enquiry", "Pre-Registration"]}
         />
       </div>
 
       <div className="mt-4 rounded-sm shadow-md px-6 py-4 mx-4 bg-white flex-1">
         <div className="flex flex-row justify-between items-center gap-3 border-b border-dashed border-gray-300 pb-3">
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
-            Enquiry List
+            Stall Enquiry List
           </p>
         </div>
 
@@ -102,7 +66,7 @@ const Enquiry = () => {
             />
             <input
               type="text"
-              placeholder="Search Enquiries..."
+              placeholder="Search Registrations..."
               onChange={(e) => handleSearch(e.target.value)}
               className="border-2 border-gray-300 rounded-md text-xs sm:text-sm px-8 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300 w-full"
             />
@@ -121,60 +85,31 @@ const Enquiry = () => {
                   <tr className="bg-primary-100 text-left text-sm text-gray-700">
                     <th className="px-4 py-2 border">SI</th>
                     <th className="px-4 py-2 border">Name</th>
+                    <th className="px-4 py-2 border">Country</th>
                     <th className="px-4 py-2 border">Phone</th>
                     <th className="px-4 py-2 border">Email</th>
-                    <th className="px-4 py-2 border">Ticket Id</th>
-                    <th className="px-4 py-2 border">Status</th>
-                    <th className="px-4 py-2 border">Message</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {enquiryData.length === 0 ? (
+                  {registrations.length === 0 ? (
                     <tr>
                       <td
                         colSpan="5"
                         className="text-center py-6 text-sm md:text-lg text-gray-500"
                       >
-                        No Enquiries Found
+                        No Pre-Registration Found
                       </td>
                     </tr>
                   ) : (
-                    enquiryData.map((enquiry, index) => (
-                      <tr key={enquiry.id}>
+                    registrations.map((reg, index) => (
+                      <tr key={reg.id}>
                         <td className="py-2 px-4 border">
                           {(currentPage - 1) * pageSize + index + 1}
                         </td>
-                        <td className="py-2 px-4 border">{enquiry.name}</td>
-                        <td className="py-2 px-4 border">{enquiry.phone}</td>
-                        <td className="py-2 px-4 border">{enquiry.email}</td>
-                        <td className="py-2 px-4 border">{enquiry.subject}</td>
-                        <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              handleStatusChange(enquiry.id, enquiry.status)
-                            }
-                            className={`text-xs px-2.5 py-1 rounded-full font-semibold
-                                  ${
-                                    enquiry.status === "pending"
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : enquiry.status === "resolved"
-                                      ? "bg-green-100 text-green-800"
-                                      : "bg-gray-200 text-gray-700"
-                                  }`}
-                          >
-                            {enquiry.status}
-                          </button>
-                        </td>
-                        <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              openDescriptionModal(enquiry.message)
-                            }
-                            className="text-xs text-primary-600 hover:underline"
-                          >
-                            View
-                          </button>
-                        </td>
+                        <td className="py-2 px-4 border">{reg.name}</td>
+                        <td className="py-2 px-4 border">{reg.country}</td>
+                        <td className="py-2 px-4 border">{reg.phone}</td>
+                        <td className="py-2 px-4 border">{reg.email}</td>
                       </tr>
                     ))
                   )}
@@ -210,15 +145,10 @@ const Enquiry = () => {
           </>
         )}
       </div>
-      <MessageModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        message={selectedMessage}
-      />
 
       <CopyrightFooter />
     </div>
   );
 };
 
-export default Enquiry;
+export default PreRegistration;
