@@ -59,7 +59,7 @@ const Login = () => {
       >
         <div className="flex justify-center">
           <img
-            src="/summerfest/admintogo/thaalam-logo.png"
+            src="/x7pQa9ZbM3/thaalam-logo.png"
             alt="Thaalam summer festival logo"
             className="w-36 h-36 object-contain mb-2"
           />

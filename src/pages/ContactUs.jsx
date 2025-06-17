@@ -14,6 +14,8 @@ const ContactUs = () => {
     facebook_url: "",
     instagram_url: "",
     pinterest_url: "",
+    twitter_url: "",
+    spotify_url: "",
     marketing_mobile_numbers: [""],
     enquiry_mobile_numbers: [""],
   });
@@ -181,6 +183,8 @@ const ContactUs = () => {
                 { label: "Instagram URL", name: "instagram_url" },
                 { label: "Pinterest URL", name: "pinterest_url" },
                 { label: "Tik Tok URL", name: "tiktok_url" },
+                { label: "Twitter URL", name: "twitter_url" },
+                { label: "Spotify URL", name: "spotify_url" },
               ].map((field) => (
                 <div key={field.name}>
                   <label className="block text-gray-800 mb-2 text-sm font-medium">

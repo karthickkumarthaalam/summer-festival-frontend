@@ -14,7 +14,6 @@ import BannerPage from './pages/BannerPage';
 import News from './pages/News';
 import ContactUs from './pages/ContactUs';
 import ShowLineUp from './pages/ShowLineUp';
-import Enquiry from './pages/Enquiry';
 import EnquiryPage from './pages/EnquiryPage';
 
 const AuthenticatedLayout = () => {
@@ -59,7 +58,7 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter basename="/summerfest/admintogo">
+      <BrowserRouter basename="/x7pQa9ZbM3">
         <AppRoutes />
         <ToastContainer position='top-right' autoClose={3000} />
       </BrowserRouter>
