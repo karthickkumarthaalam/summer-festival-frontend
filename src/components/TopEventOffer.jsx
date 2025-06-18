@@ -75,14 +75,14 @@ const TopEventOffer = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this offer?")) return;
+    if (!window.confirm("Are you sure you want to delete this News?")) return;
     setLoading(true);
     try {
       await apiCall(`/top-event-offers/${id}`, "DELETE");
       fetchOffers();
-      toast.success("Offer deleted successfully");
+      toast.success("News deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete offer");
+      toast.error("Failed to delete News");
     } finally {
       setLoading(false);
     }
@@ -93,7 +93,10 @@ const TopEventOffer = () => {
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
       <div className="flex flex-col flex-1 overflow-hidden">
-        <BreadCrumb title="Top News Management" paths={["Offer", "Top News"]} />
+        <BreadCrumb
+          title="Top News Management"
+          paths={["Banner", "Top News"]}
+        />
       </div>
 
       <div className="mt-4 rounded-sm shadow-md md:px-6 md:py-6 md:mx-4 bg-white flex-1 overflow-y-auto">
@@ -106,7 +109,7 @@ const TopEventOffer = () => {
             className="rounded-md bg-primary-500 font-medium text-xs sm:text-sm text-white px-2 py-1.5 sm:px-3 sm:py-2 flex gap-2 items-center hover:bg-primary-600 transition duration-300 "
           >
             <BadgePlus size={16} />
-            <span>Add Offer</span>
+            <span>Add News</span>
           </button>
         </div>
 
@@ -130,7 +133,7 @@ const TopEventOffer = () => {
             />
             <input
               type="text"
-              placeholder="Search Offers..."
+              placeholder="Search News..."
               onChange={(e) => handleSearch(e.target.value)}
               className="border-2 border-gray-300 rounded-md text-xs sm:text-sm px-8 py-2 focus:outline-none focus:ring-2 focus:ring-primary-300 w-full"
             />

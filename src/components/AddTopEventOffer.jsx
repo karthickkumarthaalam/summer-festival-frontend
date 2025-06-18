@@ -77,15 +77,15 @@ const AddTopEventOfferModal = ({
 
       if (editOfferData) {
         await apiCall(`/top-event-offers/${editOfferData.id}`, "PUT", payload);
-        toast.success("Top Event Offer updated successfully!");
+        toast.success("Top Event News updated successfully!");
       } else {
         await apiCall("/top-event-offers", "POST", payload);
-        toast.success("Top Event Offer created successfully!");
+        toast.success("Top Event News created successfully!");
       }
 
       onSuccess();
     } catch (error) {
-      toast.error("Failed to save Top Event Offer");
+      toast.error("Failed to save Top Event News");
     }
   };
 
@@ -115,7 +115,7 @@ const AddTopEventOfferModal = ({
               value={form.title}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-              placeholder="Offer Title"
+              placeholder="News Title"
             />
             {errors.title && (
               <p className="text-sm text-red-500">{errors.title}</p>
@@ -131,7 +131,7 @@ const AddTopEventOfferModal = ({
               value={form.redirect_url}
               onChange={handleChange}
               className="w-full border rounded px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none"
-              placeholder="https://example.com/offer"
+              placeholder="https://example.com/news"
             />
             {errors.redirect_url && (
               <p className="text-sm text-red-500">{errors.redirect_url}</p>
