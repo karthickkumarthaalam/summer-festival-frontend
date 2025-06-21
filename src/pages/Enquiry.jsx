@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { apiCall } from "../utils/apiCall";
 import { toast } from "react-toastify";
 import BreadCrumb from "../components/BreadCrumb";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, FileUp } from "lucide-react";
 import CopyrightFooter from "../components/CoyprightFooter";
 import debounce from "lodash.debounce";
 import MessageModal from "../components/MessageModal";
+import { downloadFile } from "../utils/downloadFile";
 
 const Enquiry = () => {
   const [enquiryData, setEnquiryData] = useState([]);
@@ -76,6 +77,14 @@ const Enquiry = () => {
     }
   };
 
+  const handleExport = async () => {
+    try {
+      await downloadFile("/enquiry/export", "Enquiries");
+    } catch (error) {
+      toast.error("Failed to download Enquiries");
+    }
+  };
+
   const totalPages = Math.ceil(totalRecords / pageSize);
 
   return (
@@ -92,9 +101,22 @@ const Enquiry = () => {
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
             Enquiry List
           </p>
+          <button
+            onClick={handleExport}
+            className="rounded-md bg-primary-500 font-medium text-xs sm:text-sm text-white px-4 py-1.5 sm:px-3 sm:py-2 flex gap-2 items-center hover:bg-primary-600 transition duration-300"
+          >
+            <FileUp />
+            Export Enquiry
+          </button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-end mt-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between items-center mt-4">
+          <p className="text-xs sm:text-sm text-gray-600">
+            Showing{" "}
+            {(currentPage - 1) * pageSize + (enquiryData.length > 0 ? 1 : 0)} to{" "}
+            {(currentPage - 1) * pageSize + enquiryData.length} of{" "}
+            {totalRecords} ({totalPages} {totalPages === 1 ? "Page" : "Pages"})
+          </p>
           <div className="relative w-64">
             <Search
               size={16}

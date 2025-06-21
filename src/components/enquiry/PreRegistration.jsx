@@ -3,9 +3,10 @@ import { useState, useEffect } from "react";
 import { apiCall } from "../../utils/apiCall";
 import { toast } from "react-toastify";
 import BreadCrumb from "../BreadCrumb";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, FileUp } from "lucide-react";
 import CopyrightFooter from "../CoyprightFooter";
 import debounce from "lodash.debounce";
+import { downloadFile } from "../../utils/downloadFile";
 
 const PreRegistration = () => {
   const [registrations, setRegistrations] = useState([]);
@@ -14,13 +15,13 @@ const PreRegistration = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const pageSize = 20;
+  const pageSize = 50;
 
   const fetchRegistration = async () => {
     setLoading(true);
     try {
       const response = await apiCall(
-        `/pre-registration?page=${currentPage}&search=${searchQuery}`
+        `/pre-registration?page=${currentPage}&search=${searchQuery}&limit=${50}`
       );
       setRegistrations(response.data.data);
       setTotalRecords(response.data.pagination.totalRecords);
@@ -40,6 +41,14 @@ const PreRegistration = () => {
     setCurrentPage(1);
   }, 500);
 
+  const handleExport = async () => {
+    try {
+      await downloadFile("/pre-registration/export", "Pre-Registrations");
+    } catch (error) {
+      toast.error("Failed to download Pre-Registrations");
+    }
+  };
+
   const totalPages = Math.ceil(totalRecords / pageSize);
 
   return (
@@ -54,11 +63,24 @@ const PreRegistration = () => {
       <div className="mt-4 rounded-sm shadow-md px-6 py-4 mx-4 bg-white flex-1">
         <div className="flex flex-row justify-between items-center gap-3 border-b border-dashed border-gray-300 pb-3">
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
-            Stall Enquiry List
+            Pre-Registration List
           </p>
+          <button
+            onClick={handleExport}
+            className="rounded-md bg-primary-500 font-medium text-xs sm:text-sm text-white px-4 py-1.5 sm:px-3 sm:py-2 flex gap-2 items-center hover:bg-primary-600 transition duration-300"
+          >
+            <FileUp />
+            Export Registrations
+          </button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-end mt-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between items-center mt-4">
+          <p className="text-xs sm:text-sm text-gray-600">
+            Showing{" "}
+            {(currentPage - 1) * pageSize + (registrations.length > 0 ? 1 : 0)}{" "}
+            to {(currentPage - 1) * pageSize + registrations.length} of{" "}
+            {totalRecords} ({totalPages} {totalPages === 1 ? "Page" : "Pages"})
+          </p>
           <div className="relative w-64">
             <Search
               size={16}

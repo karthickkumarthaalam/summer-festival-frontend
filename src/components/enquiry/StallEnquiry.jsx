@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { apiCall } from "../../utils/apiCall";
 import { toast } from "react-toastify";
 import BreadCrumb from "../BreadCrumb";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, FileUp } from "lucide-react";
 import CopyrightFooter from "../CoyprightFooter";
 import debounce from "lodash.debounce";
+import { downloadFile } from "../../utils/downloadFile";
 
 const StallEnquiry = () => {
   const [enquires, setEnquires] = useState([]);
@@ -13,13 +14,13 @@ const StallEnquiry = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const pageSize = 20;
+  const pageSize = 50;
 
   const fetchEnquiries = async () => {
     setLoading(true);
     try {
       const response = await apiCall(
-        `/stall-enquiry?page=${currentPage}&search=${searchQuery}`
+        `/stall-enquiry?page=${currentPage}&search=${searchQuery}&limit=${50}`
       );
       setEnquires(response.data.data);
       setTotalRecords(response.data.pagination.totalRecords);
@@ -61,8 +62,15 @@ const StallEnquiry = () => {
         )
       );
     } catch (error) {
-      console.error("Failed to update status", error);
       toast.error("Failed to update status");
+    }
+  };
+
+  const handleExport = async () => {
+    try {
+      await downloadFile("/stall-enquiry/export", "Stall_Enquiries.xlsx");
+    } catch (error) {
+      toast.error("Failed to export Enquiries");
     }
   };
 
@@ -82,9 +90,23 @@ const StallEnquiry = () => {
           <p className="text-sm sm:text-lg font-semibold text-gray-800">
             Stall Enquiry List
           </p>
+          <button
+            onClick={handleExport}
+            className="rounded-md bg-primary-500 font-medium text-xs sm:text-sm text-white px-4 py-1.5 sm:px-3 sm:py-2 flex gap-2 items-center hover:bg-primary-600 transition duration-300"
+          >
+            <FileUp />
+            Export Enquiry
+          </button>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center sm:justify-end mt-4">
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between items-center mt-4">
+          <p className="text-xs sm:text-sm text-gray-600">
+            Showing{" "}
+            {(currentPage - 1) * pageSize + (enquires.length > 0 ? 1 : 0)} to{" "}
+            {(currentPage - 1) * pageSize + enquires.length} of {totalRecords} (
+            {totalPages} {totalPages === 1 ? "Page" : "Pages"})
+          </p>
+
           <div className="relative w-64">
             <Search
               size={16}

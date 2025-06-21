@@ -28,7 +28,7 @@ const TopEventOffer = () => {
       setOffers(response.data.data);
       setTotalRecords(response.data.pagination.totalRecords);
     } catch (error) {
-      console.error("Error fetching offers: ", error);
+      console.error("Error fetching News: ", error);
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ const TopEventOffer = () => {
       });
       fetchOffers();
     } catch (error) {
-      toast.error("Failed to update offer status");
+      toast.error("Failed to update News status");
     } finally {
       setLoading(false);
     }
@@ -164,7 +164,7 @@ const TopEventOffer = () => {
                         colSpan="5"
                         className="py-6 px-4 border text-center text-gray-500"
                       >
-                        No Offers Found
+                        No News Found
                       </td>
                     </tr>
                   ) : (
