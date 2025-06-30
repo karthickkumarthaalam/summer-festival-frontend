@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { apiCall } from "../utils/apiCall";
 import { toast } from "react-toastify";
-import { EditorContent, useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 
 const AddNewsModal = ({ isOpen, onClose, editNewsData, onSuccess }) => {
   const [form, setForm] = useState({
@@ -20,14 +17,6 @@ const AddNewsModal = ({ isOpen, onClose, editNewsData, onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [preview, setPreview] = useState(null);
   const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-  const editor = useEditor({
-    extensions: [StarterKit, Image],
-    content: "",
-    onUpdate: ({ editor }) => {
-      setForm((prev) => ({ ...prev, description: editor.getHTML() }));
-    },
-  });
 
   useEffect(() => {
     if (isOpen) {
@@ -48,7 +37,6 @@ const AddNewsModal = ({ isOpen, onClose, editNewsData, onSuccess }) => {
     });
     setErrors({});
     setPreview(null);
-    if (editor) editor.commands.setContent("");
   };
 
   const populateForm = (data) => {
@@ -61,7 +49,6 @@ const AddNewsModal = ({ isOpen, onClose, editNewsData, onSuccess }) => {
       author: data.author || "",
       language: data.language || [],
     });
-    if (editor) editor.commands.setContent(data.description || "");
     if (data.image) setPreview(`${BASE_URL}/${data.image.replace(/\\/g, "/")}`);
   };
 
@@ -182,9 +169,12 @@ const AddNewsModal = ({ isOpen, onClose, editNewsData, onSuccess }) => {
         {/* Description */}
         <div className="flex flex-col mb-3">
           <label className="font-medium mb-1 text-sm">Description</label>
-          <EditorContent
-            editor={editor}
-            className="border rounded px-3 py-2 text-sm min-h-[150px]"
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            rows="6"
+            className="border rounded px-3 py-2 text-sm"
           />
           {errors.description && (
             <p className="text-sm text-red-500">{errors.description}</p>

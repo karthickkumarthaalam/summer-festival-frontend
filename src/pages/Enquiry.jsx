@@ -7,6 +7,7 @@ import CopyrightFooter from "../components/CoyprightFooter";
 import debounce from "lodash.debounce";
 import MessageModal from "../components/MessageModal";
 import { downloadFile } from "../utils/downloadFile";
+import ReplyModal from "../components/enquiry/ReplyModal";
 
 const Enquiry = () => {
   const [enquiryData, setEnquiryData] = useState([]);
@@ -14,8 +15,10 @@ const Enquiry = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [totalRecords, setTotalRecords] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setselectedMessage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReplyModalOpen, setIsReplyModalOpen] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
+  const [replyMessage, setReplyMessage] = useState("");
 
   const pageSize = 20;
 
@@ -40,8 +43,8 @@ const Enquiry = () => {
     fetchEnquiries();
   }, [currentPage, searchQuery]);
 
-  const openDescriptionModal = (description) => {
-    setselectedMessage(description);
+  const openDescriptionModal = (enquiry) => {
+    setSelectedEnquiry(enquiry);
     setIsModalOpen(true);
   };
 
@@ -82,6 +85,25 @@ const Enquiry = () => {
       await downloadFile("/enquiry/export", "Enquiries");
     } catch (error) {
       toast.error("Failed to download Enquiries");
+    }
+  };
+
+  const openReplyModal = (enquiry) => {
+    setSelectedEnquiry(enquiry);
+    setReplyMessage("");
+    setIsReplyModalOpen(true);
+  };
+
+  const handleSendReply = async () => {
+    try {
+      await apiCall(`/enquiry/${selectedEnquiry.id}/reply`, "POST", {
+        reply_message: replyMessage,
+      });
+      toast.success("Reply sent successfully");
+      fetchEnquiries();
+      setIsReplyModalOpen(false);
+    } catch (error) {
+      toast.error("Failed to send reply");
     }
   };
 
@@ -148,6 +170,7 @@ const Enquiry = () => {
                     <th className="px-4 py-2 border">Ticket Id</th>
                     <th className="px-4 py-2 border">Status</th>
                     <th className="px-4 py-2 border">Message</th>
+                    <th className="px-4 py-2 border">Reply</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,12 +212,19 @@ const Enquiry = () => {
                         </td>
                         <td className="py-2 px-4 border">
                           <button
-                            onClick={() =>
-                              openDescriptionModal(enquiry.message)
-                            }
+                            onClick={() => openDescriptionModal(enquiry)}
                             className="text-xs text-primary-600 hover:underline"
                           >
                             View
+                          </button>
+                        </td>
+                        <td className="px-4 py-2 border">
+                          <button
+                            className="text-xs text-green-500 hover:underline"
+                            onClick={() => openReplyModal(enquiry)}
+                          >
+                            {" "}
+                            Reply
                           </button>
                         </td>
                       </tr>
@@ -235,9 +265,16 @@ const Enquiry = () => {
       <MessageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        message={selectedMessage}
+        enquiry={selectedEnquiry}
       />
-
+      <ReplyModal
+        isOpen={isReplyModalOpen}
+        onClose={() => setIsReplyModalOpen(false)}
+        replyMessage={replyMessage}
+        setReplyMessage={setReplyMessage}
+        onSendReply={handleSendReply}
+        enquiry={selectedEnquiry}
+      />
       <CopyrightFooter />
     </div>
   );
