@@ -170,7 +170,7 @@ const Enquiry = () => {
                     <th className="px-4 py-2 border">Ticket Id</th>
                     <th className="px-4 py-2 border">Status</th>
                     <th className="px-4 py-2 border">Message</th>
-                    <th className="px-4 py-2 border">Reply</th>
+                    {/* <th className="px-4 py-2 border">Reply</th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -194,11 +194,12 @@ const Enquiry = () => {
                         <td className="py-2 px-4 border">{enquiry.email}</td>
                         <td className="py-2 px-4 border">{enquiry.subject}</td>
                         <td className="py-2 px-4 border">
-                          <button
-                            onClick={() =>
-                              handleStatusChange(enquiry.id, enquiry.status)
-                            }
-                            className={`text-xs px-2.5 py-1 rounded-full font-semibold
+                          <div className="flex flex-wrap items-center gap-1">
+                            <button
+                              onClick={() =>
+                                handleStatusChange(enquiry.id, enquiry.status)
+                              }
+                              className={`text-xs px-2.5 py-1 rounded-full font-semibold
                                   ${
                                     enquiry.status === "pending"
                                       ? "bg-yellow-100 text-yellow-800"
@@ -206,19 +207,33 @@ const Enquiry = () => {
                                       ? "bg-green-100 text-green-800"
                                       : "bg-gray-200 text-gray-700"
                                   }`}
-                          >
-                            {enquiry.status}
-                          </button>
+                            >
+                              {enquiry.status}
+                            </button>
+                            {enquiry.status === "closed" && (
+                              <span className="inline-flex items-center rounded-full bg-red-100 text-red-800 text-xs font-medium px-2 py-0.5 whitespace-nowrap">
+                                #Mail Sent
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="py-2 px-4 border">
-                          <button
-                            onClick={() => openDescriptionModal(enquiry)}
-                            className="text-xs text-primary-600 hover:underline"
-                          >
-                            View
-                          </button>
+                          <div className="flex flex-wrap items-center gap-1">
+                            <button
+                              onClick={() => openDescriptionModal(enquiry)}
+                              className="text-xs text-primary-700 hover:underline bg-primary-50 rounded-full items-center inline-flex px-2 py-0.5 font-medium"
+                            >
+                              View
+                            </button>
+
+                            {enquiry.comment && (
+                              <span className="inline-flex items-center rounded-full bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5">
+                                #Commented
+                              </span>
+                            )}
+                          </div>
                         </td>
-                        <td className="px-4 py-2 border">
+                        {/* <td className="px-4 py-2 border">
                           <button
                             className="text-xs text-green-500 hover:underline"
                             onClick={() => openReplyModal(enquiry)}
@@ -226,7 +241,7 @@ const Enquiry = () => {
                             {" "}
                             Reply
                           </button>
-                        </td>
+                        </td> */}
                       </tr>
                     ))
                   )}
@@ -266,6 +281,7 @@ const Enquiry = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         enquiry={selectedEnquiry}
+        refreshData={fetchEnquiries}
       />
       <ReplyModal
         isOpen={isReplyModalOpen}
