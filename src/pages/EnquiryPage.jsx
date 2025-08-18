@@ -2,6 +2,7 @@ import { useState } from "react";
 import Enquiry from "./Enquiry";
 import StallEnquiry from "../components/enquiry/StallEnquiry";
 import PreRegistration from "../components/enquiry/PreRegistration";
+import RefundEnquiry from "../components/enquiry/RefundEnquiry";
 
 const EnquiryPage = () => {
   const [activeTab, setActiveTab] = useState("ticket");
@@ -10,6 +11,7 @@ const EnquiryPage = () => {
     { id: "ticket", label: "Ticket Enquiry" },
     { id: "stall", label: "Stall Enquiry" },
     { id: "registration", label: "Pre-Registration" },
+    { id: "refund", label: "Refund Enquiry" },
   ];
 
   return (
@@ -35,6 +37,7 @@ const EnquiryPage = () => {
         {activeTab === "ticket" && <Enquiry />}
         {activeTab === "stall" && <StallEnquiry />}
         {activeTab === "registration" && <PreRegistration />}
+        {activeTab === "refund" && <RefundEnquiry />}
       </div>
     </div>
   );
