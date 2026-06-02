@@ -16,7 +16,7 @@ const EnquiryPage = () => {
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <div className="p-4 shadow-md border-t border-dashed border-gray-200 drop-shadow-lg">
+      <div className="p-4 shadow-md border-t border-dashed border-gray-200 drop-shadow-lg overflow-auto">
         <div className="flex flex-1 gap-2">
           {tabs.map((tab) => (
             <button
@@ -26,7 +26,7 @@ const EnquiryPage = () => {
                 activeTab === tab.id
                   ? "bg-primary-500 text-white"
                   : "hover:bg-gray-100 text-gray-800"
-              }`}
+              } whitespace-nowrap`}
             >
               {tab.label}
             </button>

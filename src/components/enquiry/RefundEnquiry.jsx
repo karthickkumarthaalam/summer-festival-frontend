@@ -23,7 +23,7 @@ const RefundEnquiry = () => {
     setLoading(true);
     try {
       const response = await apiCall(
-        `/refund-enquiry?page=${currentPage}&search=${searchQuery}&status=${statusFilter}`
+        `/refund-enquiry?page=${currentPage}&search=${searchQuery}&status=${statusFilter}&limit=${pageSize}`
       );
       setEnquiries(response?.data);
       setTotalRecords(response?.pagination?.totalRecords);
@@ -45,6 +45,9 @@ const RefundEnquiry = () => {
   }, [currentPage, searchQuery, statusFilter]);
 
   const handleStatusChange = async (id, currentStatus) => {
+    if (!window.confirm("Are you sure you want to update status change"))
+      return;
+
     if (currentStatus === "refunded") {
       toast.info("Ticket is already refunded and cannot be changed.");
       return;
@@ -100,7 +103,7 @@ const RefundEnquiry = () => {
 
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between items-center mt-4">
           <p className="text-xs sm:text-sm text-gray-600">
-            showing{" "}
+            Showing{" "}
             {(currentPage - 1) * pageSize + (enquiries.length > 0 ? 1 : 0)} to{" "}
             {(currentPage - 1) * pageSize + enquiries.length} of {totalRecords}{" "}
             ({totalPages} {totalPages === 1 ? "page" : "pages"})
@@ -158,7 +161,7 @@ const RefundEnquiry = () => {
                         </td>
                         <td className="px-4 py-2 border">
                           <button
-                            className="text-primary-500 bg-primary-50 rounded-full px-2 py-0.5 text-sm font-medium"
+                            className="text-primary-700 bg-primary-50 rounded-full px-2 py-0.5 text-sm font-medium"
                             onClick={() => {
                               setSelectedEnquiry(enquiry);
                               setShowOrderDetails(true);
@@ -169,11 +172,23 @@ const RefundEnquiry = () => {
                         </td>
                         <td className="px-4 py-2 border">{enquiry.NAME}</td>
                         <td className="px-4 py-2 border">{enquiry.EMAIL_ID}</td>
-                        <td className="px-4 py-2 border">
+                        <td className="px-4 py-2 border whitespace-nowrap">
                           {enquiry.PHONE_NUMBER}
                         </td>
                         <td className="px-4 py-2 border font-semibold">
-                          {capitalizeStr(enquiry.REFUND_OR_CONTINUE)}
+                          <p className="mb-1 text-gray-600">
+                            {capitalizeStr(enquiry.REFUND_OR_CONTINUE)}
+                          </p>
+                          {enquiry.PAYMENT_MODE ? (
+                            <p className="whitespace-nowrap">
+                              Payment Mode:{" "}
+                              <span className="text-primary-600">
+                                {capitalizeStr(enquiry.PAYMENT_MODE)}
+                              </span>
+                            </p>
+                          ) : (
+                            ""
+                          )}
                         </td>
                         <td className="px-4 py-2 border">
                           <button
@@ -212,7 +227,7 @@ const RefundEnquiry = () => {
               </table>
             </div>
             {totalPages > 1 && (
-              <div className="flex jsutify-center items-center gap-4 mt-4">
+              <div className="flex justify-center items-center gap-4 mt-4">
                 <button
                   disabled={currentPage === 1}
                   onClick={() =>
@@ -260,7 +275,7 @@ const DescriptionModal = ({ isOpen, enquiry, onClose }) => {
     return null;
   }
   return (
-    <div className="inset-0 fixed z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="inset-0 fixed z-[100] flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white w-full max-w-xl rounded-xl shadow-2xl p-6 relative border border-gray-200">
         <button
           onClick={onClose}
@@ -281,7 +296,9 @@ const DescriptionModal = ({ isOpen, enquiry, onClose }) => {
 
           {enquiry?.PAYMENT_MODE && (
             <p className="text-md whitespace-pre-wrap mt-2">
-              <span className="text-primary-600">Payment Mode: </span>
+              <span className="text-gray-800 font-semibold">
+                Payment Mode:{" "}
+              </span>
               <span className="font-semibold text-gray-700">
                 {enquiry?.PAYMENT_MODE}
               </span>
@@ -290,54 +307,37 @@ const DescriptionModal = ({ isOpen, enquiry, onClose }) => {
 
           {enquiry?.TWINT_ACCOUNT && (
             <p className="text-md whitespace-pre-wrap mt-2">
-              <span className="text-primary-600">Twint Account: </span>
+              <span className="text-gray-800 font-semibold">
+                Twint Account:{" "}
+              </span>
               <span className="font-semibold text-gray-700">
                 {" "}
                 {enquiry?.TWINT_ACCOUNT}
               </span>
             </p>
           )}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-            {enquiry?.FULL_NAME && (
-              <p className="text-md whitespace-pre-wrap">
-                <span className="text-primary-600">Full Name: </span>
-                <span className="font-semibold text-gray-700">
-                  {" "}
-                  {enquiry?.FULL_NAME}
-                </span>
-              </p>
-            )}
 
-            {enquiry?.BANK_NAME && (
-              <p className="text-md whitespace-pre-wrap">
-                <span className="text-primary-600">Bank Name: </span>
-                <span className="font-semibold text-gray-700">
-                  {" "}
-                  {enquiry?.BANK_NAME}
-                </span>
-              </p>
-            )}
+          {enquiry?.USER_IP && (
+            <p className="text-md whitespace-pre-wrap mt-2">
+              <span className="text-gray-800 font-semibold">
+                User IP Address:{" "}
+              </span>
+              <span className="font-semibold text-gray-700">
+                {" "}
+                {enquiry?.USER_IP}
+              </span>
+            </p>
+          )}
 
-            {enquiry?.IBAN_NUMBER && (
-              <p className="text-md whitespace-pre-wrap">
-                <span className="text-primary-600">IBAN Number: </span>
-                <span className="font-semibold text-gray-700">
-                  {" "}
-                  {enquiry?.IBAN_NUMBER}
-                </span>
-              </p>
-            )}
-
-            {enquiry?.BIC_SWIFT_CODE && (
-              <p className="text-md whitespace-pre-wrap">
-                <span className="text-primary-600">SWIFT Code: </span>
-                <span className="font-semibold text-gray-700">
-                  {" "}
-                  {enquiry?.BIC_SWIFT_CODE}
-                </span>
-              </p>
-            )}
-          </div>
+          {enquiry?.USER_CITY && (
+            <p className="text-md whitespace-pre-wrap mt-2">
+              <span className="text-gray-800 font-semibold">User City: </span>
+              <span className="font-semibold text-gray-700">
+                {" "}
+                {enquiry?.USER_CITY}
+              </span>
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -386,7 +386,7 @@ const OrderDetailsModal = ({ isOpen, enquiry, onClose }) => {
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white w-full max-w-2xl rounded-xl shadow-2xl p-6 relative border border-gray-200">
         {/* Close Button */}
         <button
@@ -407,11 +407,12 @@ const OrderDetailsModal = ({ isOpen, enquiry, onClose }) => {
 
             <div className="mb-4 space-y-1">
               <p>
-                <strong>Total Tickets: </strong> {totalTickets}
+                <span className="font-semibold">Total Tickets: </span>{" "}
+                {totalTickets}
               </p>
               <p>
-                <strong>Total Amount Collected: </strong>
-                {totalAmount.toFixed(2)}
+                <span className="font-semibold">Total Amount Collected: </span>
+                CHF {totalAmount.toFixed(2)}
               </p>
             </div>
 
@@ -432,7 +433,9 @@ const OrderDetailsModal = ({ isOpen, enquiry, onClose }) => {
                       <td className="p-2 border">{ticket?.TICKET_ID}</td>
                       <td className="p-2 border">{ticket?.TICKET_CLASS}</td>
                       <td className="p-2 border">{ticket?.FIRST_NAME}</td>
-                      <td className="p-2 border">{ticket?.AMOUNT_COLLECTED}</td>
+                      <td className="p-2 border">
+                        CHF {ticket?.AMOUNT_COLLECTED}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
